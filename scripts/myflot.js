@@ -2,17 +2,17 @@
 $(function() {
 
   var d1 = [];
-  for (var i = 0; i <= 11; i += 1) {
+  for (var i = 0; i < 6; i += 1) {
     d1.push([i, parseInt(Math.random() * 30)]);
   }
 
   var d2 = [];
-  for (var i = 0; i <= 11; i += 1) {
+  for (var i = 0; i < 12; i += 1) {
     d2.push([i, parseInt(Math.random() * 30)]);
   }
 
   var d3 = [];
-  for (var i = 0; i <= 5; i += 1) {
+  for (var i = 0; i < 6; i += 1) {
     d3.push([i, parseInt(Math.random() * 30)]);
   }
 
@@ -28,10 +28,10 @@ $(function() {
                 show: true,
                 barWidth: 0.8,
                 fillColor:'rgba(0, 75, 121, 0.65)',
-                fill: true,
                 lineWidth:0}
                 },
-      xaxis: { tickLength: 0 },
+                grid:{borderColor:'#ccc',borderWidth:1},
+                xaxis: { tickLength: 0 },
     });
     $.plot("#placeholder_CPU", [ d2 ], {
       series: {
@@ -42,7 +42,8 @@ $(function() {
                 fill: true,
                 lineWidth:0}
                 },
-      xaxis: { tickLength: 0 },
+                grid:{borderColor:'#ccc',borderWidth:1},
+                xaxis: { tickLength: 0 },
     });
 
     $.plot("#placeholder_GPU2", [ d1], {
@@ -54,7 +55,8 @@ $(function() {
                 fill: true,
                 lineWidth:0}
                 },
-      xaxis: { tickLength: 0 },
+                grid:{borderColor:'#ccc',borderWidth:1},
+                xaxis: { tickLength: 0 },
     });
 
 
@@ -102,9 +104,9 @@ $(window).resize(function () {
 		var data = [],
 			series = Math.floor(Math.random() * 6) + 3;
 
-		for (var i = 0; i < series; i++) {
+		for (var i = 0; i < 4; i++) {
 			data[i] = {
-				label: "Series" + (i + 1),
+				label: "Series" + (i + 2),
 				data: Math.floor(Math.random() * 100) + 1
 			}
 		}
@@ -117,27 +119,81 @@ $(window).resize(function () {
 			placeholder.unbind();
 			$.plot(placeholder, data, {
 				series: {
-					pie: {
-						innerRadius: 0.5,
-						show: true
-					}
-				}
+          pie: {
+              innerRadius:0.5,
+              stroke:{
+                width:0,
+                color:'#ddd'
+              },
+              show: true,
+              radius: 1,
+              label: {
+                  show: true,
+                  radius: 1,
+                  formatter: function(label, series) {
+                      return '<div style="font-size:12.5px; bottom:0; position:relative; padding: 2px; color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+                  },
+                  background: {
+                      opacity: 0.8,
+                      color: '#444'
+                  }
+              }
+          }
+				},   legend: {
+        show: false
+    }
 			});
 
 			$.plot(placeholder2, data, {
 				series: {
-					pie: {
-						innerRadius: 0.5,
-						show: true
-					}
-				}
+          pie: {
+              innerRadius:0.5,
+              stroke:{
+                width:0,
+                color:'#ddd'
+              },
+              show: true,
+              radius: 1,
+              label: {
+                  show: true,
+                  radius: 1,
+                  formatter: function(label, series) {
+                      return '<div style="font-size:12.5px; text-align:center; padding:2px; color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+                  },
+                  background: {
+                      opacity: 0.8,
+                      color: '#444'
+                  }
+              }
+          }
+        },   legend: {
+        show: false
+      }
 			});
       $.plot(placeholder3, data, {
         series: {
           pie: {
-              show: true
-          }
-      }
+            stroke:{
+              width:0,
+              color:'#ddd'
+            },
+            show: true,
+            radius: 1,
+            label: {
+                show: true,
+                radius: 1,
+                formatter: function(label, series) {
+                    return '<div style="font-size:12.5px; text-align:center; padding:2px; color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+                },
+                background: {
+                    opacity: 0.8,
+                    color: '#444'
+                }
+            }
+        }
+      },   legend: {
+      show: false
+    }
       });
       function labelFormatter(label, series) {
         return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
