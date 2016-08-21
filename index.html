@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <link href="css/style.css" rel="stylesheet"></link>
 
   <title>PROJECT</title>
@@ -10,13 +11,14 @@
   <script language="javascript" type="text/javascript" src="flot/jquery.js"></script>
   <script language="javascript" type="text/javascript" src="flot/jquery.flot.js"></script>
   <script language="javascript" type="text/javascript" src="flot/jquery.flot.pie.js"></script>
+  <script language="javascript" type="text/javascript" src="flot/jquery.flot.categories.js"></script>
   <script src="scripts/myflot.js"></script>
 
 </head>
 
 <body>
 
-<div class="black">
+<div class="left_content">
 
 <div class="gpu-container">
   <h1>GPU CORES</h1>
@@ -35,15 +37,20 @@
 </div>
 
 </div>
-<div class="purple">
-  <h1>Number of users on BEAST </h1>
-  <br>
-  <div class="circlehold"><h2>55</h2></div>
-  <h1>Number of users on ROUGE </h1>
-  <br>
-    <div class="circlehold"><h2>22</h2></div>
+<div class="right_content">
+  <div class="memory-container">
+  <div class="header_pie">  <h1>BEAST MEMORY  SPACE </h1></div>
+    <div id="memoryplaceholder" class="memory-placeholder"></div>
+
+  </div>
+  <div class="memory2-container">
+  <div class="header_pie">  <h1>ROUGE MEMORY  SPACE </h1></div>
+    <div id="memory2placeholder" class="memory2-placeholder"></div>
+
+  </div>
+<!--  -->
 </div>
-<div class="green">
+<div class="footer_content">
 
 <div class="diskspace-container">
   <div class="header_pie"><h1>BEAST DISK SPACE </h1></div>
@@ -54,12 +61,20 @@
   <div class="header_pie"><h1>ROGUE DISK SPACE </h1></div>
   <div id="diskspace2placeholder" class="diskspace2-placeholder"></div>
 </div>
-<div class="memory-container">
-<div class="header_pie">  <h1>MEMORY  SPACE </h1></div>
-  <div id="memoryplaceholder" class="memory-placeholder"></div>
-
+<div id="hold_info">
+  <div class="header_pie"></div>
+<h1>Number of users on BEAST </h1>
+<hr>
+  <br>
+  <div class="circlehold"><h2>55</h2></div>
+  <h1>Number of users on ROGUE </h1>
+  <hr>
+  <br>
+    <div class="circlehold"><h2>22</h2></div>
+  </div>
+  <div id="logo_hold"><div id="nott_logo"></div>
 </div>
-<div id="nott_logo"></div>
+
 </div>
 
 

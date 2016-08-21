@@ -1,10 +1,7 @@
 
 $(function() {
 
-  var d1 = [];
-  for (var i = 0; i < 6; i += 1) {
-    d1.push([i, parseInt(Math.random() * 30)]);
-  }
+  var d1 = [ ["January", 10], ["February", 8], ["March", 4], ["April", 13], ["May", 17], ["June", 9] ];
 
   var d2 = [];
   for (var i = 0; i < 12; i += 1) {
@@ -56,7 +53,7 @@ $(function() {
                 lineWidth:0}
                 },
                 grid:{borderColor:'#ccc',borderWidth:1},
-                xaxis: { tickLength: 0 },
+                xaxis: { mode:"categories", tickLength: 0 },
     });
 
 
@@ -114,6 +111,7 @@ $(window).resize(function () {
 		var placeholder = $("#diskspaceplaceholder");
 		var placeholder2 = $("#diskspace2placeholder");
     var placeholder3 = $("#memoryplaceholder");
+    var placeholder4 = $("#memory2placeholder");
 		$(function() {
 
 			placeholder.unbind();
@@ -198,9 +196,42 @@ $(window).resize(function () {
       function labelFormatter(label, series) {
         return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
       }
+      $.plot(placeholder4, data, {
+        series: {
+          pie: {
+            stroke:{
+              width:0,
+              color:'#ddd'
+            },
+            show: true,
+            radius: 1,
+            label: {
+                show: true,
+                radius: 1,
+                formatter: function(label, series) {
+                    return '<div style="font-size:12.5px; text-align:center; padding:2px; color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+                },
+                background: {
+                    opacity: 0.8,
+                    color: '#444'
+                }
+            }
+        }
+      },   legend: {
+      show: false
+    }
+      });
+      function labelFormatter(label, series) {
+        return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
+      }
+
 
 		});
-
+    $(document).ready(function(){
+    $.get('scripts/gpuinfo.txt',function(data){
+      alert(data)
+    },"text");
+    });
 	});
 
 	// A custom label formatter used by several of the plots

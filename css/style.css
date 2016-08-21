@@ -21,7 +21,7 @@ body,html{
 
 }
 
-.black{
+.left_content{
 
 
   padding-right: 3px ;
@@ -33,18 +33,18 @@ body,html{
   background-color: #f2f2f2;
 }
 
-.purple{
+.right_content{
   float: right;
   position: relative;
   display: inline-block;
-  border-left: 2px solid #999;
+
   width: 23.7%;
   height:70%;
   padding-top: 60px;
-  background-color: #f2f2f2;
+  background-color: #ddd;
 }
 
-.green{
+.footer_content{
   position: relative;
   display: inline-block;
   width: 100%;
@@ -171,26 +171,85 @@ body,html{
 }
 .memory-container {
 
-	width: 25%;
-	height: 90%;
+	width: 82%;
+	height:48%;
   margin-bottom: 20px;
-	padding: 60px 15px 15px 15px;
+	padding: 20%  15px 15px;
   display: inline;
-  bottom: 1%;
-  left: 51.1%;
+  top: 0%;
+
   position: absolute;
-  box-shadow: 1px 1px 1px #999;
-  margin:4px 5px;
+  /*box-shadow: 1px 1px 1px #999;*/
+  margin:4px 9%;
 	background: #ddd;
 
 
 }
-.purple h1{
-  position: relative;
-  font-size: 21px;
-  color:#595959;
-  margin: 2em 4em;
+.memory2-container {
 
+	width: 82%;
+	height: 48%;
+  margin-bottom: 20px;
+	padding: 20%  15px 15px;
+  display: inline;
+  top: 51%;
+  position: absolute;
+  /*box-shadow: 1px 1px 1px #999;*/
+  margin:4px 9%;
+	background: #ddd;
+
+
+}
+
+.right_content .header_pie{
+  position: absolute;
+  top: -2%;
+  left: -11%;
+  text-align: center;
+  padding-top: 20px;
+  height: 20%;
+  width: 125%;
+  background-color: rgba(179, 179, 179,0.8);
+}
+.memory2-container .header_pie{
+  position: absolute;
+  top: 0;
+  left: -11%;
+  text-align: center;
+  padding-top: 20px;
+  height: 20%;
+  width: 125%;
+  background-color: rgba(179, 179, 179,0.8);
+}
+#hold_info{
+  width: 20%;
+  height: 90%;
+  padding-top: 1em;
+  position: relative;
+  top: 7.5%;
+  text-align: center;
+  left: 11.3%;
+
+}
+#hold_info h1{
+  position: relative;
+  display:inline;
+  font-size: 16px;
+  color:#fff;
+
+}
+#hold_info hr{
+  border-top: 1px solid rgba(255, 255, 255,0.5);
+  width: 65%;
+  margin: 0 auto;
+  position: relative;
+
+}
+#hold_info .header_pie{
+  width: 100%;
+  height: 100%;
+  background-color: rgba(51, 51, 51,0.7);
+  box-shadow: 0px 1px 1px #999;
 }
 .memory-placeholder {
 	width: 100%;
@@ -199,31 +258,40 @@ body,html{
 	line-height: 1.2em;
 
 }
+.memory2-placeholder {
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
+	line-height: 1.2em;
+
+}
 #nott_logo{
-  width:15.5%;
+  width:100%;
   height: 40%;
   position: absolute;
   bottom:5%;
-  right:1%;
+  right: -29%;
   background-image: url("University_of_Nottingham_logo.svg");
   background-size: contain;
   background-repeat: no-repeat;
 }
 .circlehold{
   position: relative;
-  top: -2.5em;
-  width: 150px;
-  border: 3px solid rgba(18, 139, 47,0.3);
-  height: 150px;
+  top: -0.5em;
+  width: 23%;
+  border: 3px solid rgba(255, 255, 255,0.3);
+  height: 35%;
+  margin: 0 auto;
   border-radius: 100%;
 
 }
 .circlehold h2{
   position: relative;
-  font-size: 84px;
+  font-size: 2.5vw;
   font-family: arial;
-  color:#333333;
+  color:#fff;
   opacity: 0.9;
+
   text-align: center;
   top: 0.25em;
 }
@@ -236,4 +304,14 @@ body,html{
   height: 20%;
   width: 100%;
   background-color: #b3b3b3;
+}
+#logo_hold{
+  border-top: 1px dotted #999;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 23.7%;
+  height: 100%;
+  background-color: #ddd;
+
 }
