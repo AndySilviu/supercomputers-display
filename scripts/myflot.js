@@ -1,63 +1,85 @@
 
 $(function() {
 
-  var d1 = [ ["January", 10], ["February", 8], ["March", 4], ["April", 13], ["May", 17], ["June", 9] ];
-
-  var d2 = [];
-  for (var i = 0; i < 12; i += 1) {
-    d2.push([i, parseInt(Math.random() * 30)]);
-  }
-
-  var d3 = [];
-  for (var i = 0; i < 6; i += 1) {
-    d3.push([i, parseInt(Math.random() * 30)]);
-  }
-
   var stack = 0,
     bars = true,
     lines = false,
     steps = false;
 
+  $.get('scripts/gpuinfo.txt',function(gpu_info){
 
-    $.plot("#placeholder_GPU", [d3 ], {
-      series: {
-          bars: {
-                show: true,
-                barWidth: 0.8,
-                fillColor:'rgba(0, 75, 121, 0.65)',
-                lineWidth:0}
-                },
-                grid:{borderColor:'#ccc',borderWidth:1},
-                xaxis: { tickLength: 0 },
-    });
-    $.plot("#placeholder_CPU", [ d2 ], {
-      series: {
-          bars: {
-                show: true,
-                barWidth: 0.8,
-                fillColor:'rgba(0, 75, 121, 0.65)',
-                fill: true,
-                lineWidth:0}
-                },
-                grid:{borderColor:'#ccc',borderWidth:1},
-                xaxis: { tickLength: 0 },
-    });
+    var d = gpu_info.split("%");
 
-    $.plot("#placeholder_GPU2", [ d1], {
+    var gpu_data = [];
+    for (var i = 0; i < d.length; ++i) {
+      gpu_data.push([d[i]+"%",   parseInt(d[i])]);
+    }
+    // 45% CORE 1
+    $.plot("#placeholder_GPU", [gpu_data ], {
       series: {
           bars: {
                 show: true,
                 barWidth: 0.8,
                 fillColor:'rgba(0, 75, 121, 0.65)',
-                fill: true,
                 lineWidth:0}
                 },
                 grid:{borderColor:'#ccc',borderWidth:1},
                 xaxis: { mode:"categories", tickLength: 0 },
+                yaxis: {
+                   min: 0,
+                   max: 100,
+               },
     });
 
+},"text");
+
+$.get('scripts/gpumeminfo.txt',function(gpumem_info){
+
+  var d = gpumem_info.split("MiB");
+
+  var gpu2_data = [];
+  for (var i = 0; i < d.length; i+=2) {
+    gpu2_data.push([parseInt(d[i])+"MiB /\n "+parseInt(d[i+1])+"MiB ",  parseInt(d[i])*100/parseInt(d[i+1])]);
+  }
+
+  $.plot("#placeholder_GPU2", [gpu2_data], {
+    series: {
+        bars: {
+              show: true,
+              barWidth: 0.8,
+              fillColor:'rgba(0, 75, 121, 0.65)',
+              fill: true,
+              lineWidth:0}
+              },
+              grid:{borderColor:'#ccc',borderWidth:1},
+              xaxis: { mode:"categories", tickLength: 0 },
+              yaxis: {
+                 min: 0,
+                 max: 100,
+             },
+  });
+
+},"text");
 
 
+  var cpu_data = [];
+
+  for (var i = 0; i < 12; i += 1) {
+    cpu_data.push([i, parseInt(Math.random() * 30)]);
+  }
+
+    $.plot("#placeholder_CPU", [ cpu_data ], {
+      series: {
+          bars: {
+                show: true,
+                barWidth: 0.8,
+                fillColor:'rgba(0, 75, 121, 0.65)',
+                fill: true,
+                lineWidth:0}
+                },
+                grid:{borderColor:'#ccc',borderWidth:1},
+                xaxis: { tickLength: 0 },
+    });
 
 
 
@@ -99,19 +121,47 @@ $(window).resize(function () {
 		// Randomly Generated Data
 
 		var data = [],
-			series = Math.floor(Math.random() * 6) + 3;
+			series = 2;
 
-		for (var i = 0; i < 4; i++) {
-			data[i] = {
-				label: "Series" + (i + 2),
+		for (var i = 0; i < series; i++) {
+    };
+			data[0] = {
+				label: "Used",
 				data: Math.floor(Math.random() * 100) + 1
 			}
-		}
+
+      data[1] = {
+				label: "Free",
+				data: Math.floor(Math.random() * 100) + 1
+			}
+
 
 		var placeholder = $("#diskspaceplaceholder");
 		var placeholder2 = $("#diskspace2placeholder");
     var placeholder3 = $("#memoryplaceholder");
     var placeholder4 = $("#memory2placeholder");
+
+    $.get('scripts/diskinfo.txt',function(disk_info){
+
+      var disk_data = disk_info.split(" ");
+      var data = [],
+  			series = 2;
+      var used_disk = 0;
+      var free_disk = 0;
+  		for (var i = 0; i < disk_data.length; i+=2) {
+        used_disk += parseInt(disk_data[i]);
+        free_disk += parseInt(disk_data[i+1]);
+      }
+  			data[0] = {
+  				label: "Used",
+  				data: used_disk
+  			}
+
+        data[1] = {
+  				label: "Free",
+  				data: free_disk
+  			}
+
 		$(function() {
 
 			placeholder.unbind();
@@ -141,7 +191,7 @@ $(window).resize(function () {
         show: false
     }
 			});
-
+},"text");
 			$.plot(placeholder2, data, {
 				series: {
           pie: {
@@ -227,11 +277,7 @@ $(window).resize(function () {
 
 
 		});
-    $(document).ready(function(){
-    $.get('scripts/gpuinfo.txt',function(data){
-      alert(data)
-    },"text");
-    });
+
 	});
 
 	// A custom label formatter used by several of the plots
