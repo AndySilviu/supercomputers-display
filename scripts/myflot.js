@@ -13,12 +13,17 @@ $(function() {
     var gpu_data = [];
     for (var i = 0; i < d.length; ++i) {
       gpu_data.push([d[i]+"%",   parseInt(d[i])]);
+      //hacky way for preventing the bars to merge:
+      for(var j=0; j < i; ++j) {
+        gpu_data[i][0] += " ";
+      }
     }
     // 45% CORE 1
     $.plot("#placeholder_GPU", [gpu_data ], {
       series: {
           bars: {
                 show: true,
+                align: "center",
                 barWidth: 0.8,
                 fillColor:'rgba(0, 75, 121, 0.65)',
                 lineWidth:0}
@@ -35,11 +40,18 @@ $(function() {
 
 $.get('scripts/gpumeminfo.txt',function(gpumem_info){
 
+  //document.getElementById("demo").innerHTML = gpumem_info;
+
   var d = gpumem_info.split("MiB");
 
   var gpu2_data = [];
-  for (var i = 0; i < d.length; i+=2) {
-    gpu2_data.push([parseInt(d[i])+"MiB /\n "+parseInt(d[i+1])+"MiB ",  parseInt(d[i])*100/parseInt(d[i+1])]);
+  for (var i = 0; i < d.length; ++i) {
+    gpu2_data.push([(parseInt(d[i*2]))+"M / "+(parseInt(d[i*2+1]))+"M",  parseInt(d[i*2])*100/parseInt(d[i*2+1])]);
+    //same hacky way:
+    for(var j=0; j < i; ++j) {
+      gpu2_data[i][0]+=" ";
+    }
+
   }
 
   $.plot("#placeholder_GPU2", [gpu2_data], {
@@ -47,6 +59,7 @@ $.get('scripts/gpumeminfo.txt',function(gpumem_info){
         bars: {
               show: true,
               barWidth: 0.8,
+              align: "center",
               fillColor:'rgba(0, 75, 121, 0.65)',
               fill: true,
               lineWidth:0}
@@ -141,17 +154,22 @@ $(window).resize(function () {
     var placeholder3 = $("#memoryplaceholder");
     var placeholder4 = $("#memory2placeholder");
 
-    $.get('scripts/diskinfo.txt',function(disk_info){
+  $.get('scripts/diskinfo.txt',function(disk_info){
+
 
       var disk_data = disk_info.split(" ");
+
       var data = [],
   			series = 2;
       var used_disk = 0;
       var free_disk = 0;
-  		for (var i = 0; i < disk_data.length; i+=2) {
+  		for (var i = 0; i < disk_data.length-1; i+=2) {
         used_disk += parseInt(disk_data[i]);
         free_disk += parseInt(disk_data[i+1]);
       }
+
+
+
   			data[0] = {
   				label: "Used",
   				data: used_disk
@@ -162,9 +180,8 @@ $(window).resize(function () {
   				data: free_disk
   			}
 
-		$(function() {
 
-			placeholder.unbind();
+		//	placeholder.unbind();
 			$.plot(placeholder, data, {
 				series: {
           pie: {
@@ -191,7 +208,11 @@ $(window).resize(function () {
         show: false
     }
 			});
-},"text");
+
+      },"text");
+
+
+
 			$.plot(placeholder2, data, {
 				series: {
           pie: {
@@ -218,6 +239,30 @@ $(window).resize(function () {
         show: false
       }
 			});
+
+      $.get('scripts/meminfo.txt',function(mem_info){
+
+
+          var mem_data = mem_info.split(" ");
+
+          var data = [],
+            series = 3;
+
+            data[0] = {
+              label: "Used",
+              data: parseInt(mem_data[0])
+            }
+
+            data[1] = {
+              label: "Free",
+              data: parseInt(mem_data[1])
+            }
+
+            data[2] = {
+              label: "Buff/Cache",
+              data: parseInt(mem_data[2])
+            }
+
       $.plot(placeholder3, data, {
         series: {
           pie: {
@@ -243,6 +288,9 @@ $(window).resize(function () {
       show: false
     }
       });
+
+  },"text");
+
       function labelFormatter(label, series) {
         return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
       }
@@ -276,8 +324,10 @@ $(window).resize(function () {
       }
 
 
-		});
-
 	});
 
-	// A custom label formatter used by several of the plots
+$.get('scripts/userinfo.txt',function(user_info){
+
+  document.getElementById("beast_users").innerHTML = user_info ;
+
+},"text");
