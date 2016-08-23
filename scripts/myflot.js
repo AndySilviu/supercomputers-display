@@ -74,27 +74,49 @@ $.get('scripts/gpumeminfo.txt',function(gpumem_info){
 
 },"text");
 
+$.get('scripts/cpuinfo.txt',function(cpu_info){
 
-  var cpu_data = [];
 
-  for (var i = 0; i < 12; i += 1) {
-    cpu_data.push([i, parseInt(Math.random() * 30)]);
-  }
+  var d = cpu_info.split(",");
+  var cpu_data = [[d[0]+" (1min)", d[0]],[d[1]+" (5min)", d[1]],[d[2]+" (15min)", d[2]]];
 
     $.plot("#placeholder_CPU", [ cpu_data ], {
       series: {
           bars: {
                 show: true,
                 barWidth: 0.8,
+                align: "center",
                 fillColor:'rgba(0, 75, 121, 0.65)',
                 fill: true,
                 lineWidth:0}
                 },
                 grid:{borderColor:'#ccc',borderWidth:1},
-                xaxis: { tickLength: 0 },
+                xaxis: { mode:"categories", tickLength: 0 },
     });
 
+},"text");
 
+$.get('scripts/cpuinfo.txt',function(cpu_info){
+
+
+  var d = cpu_info.split(",");
+  var cpu_data = [[d[0]+" (1min)", d[0]],[d[1]+" (5min)", d[1]],[d[2]+" (15min)", d[2]]];
+
+    $.plot("#placeholder_CPU2", [ cpu_data ], {
+      series: {
+          bars: {
+                show: true,
+                barWidth: 0.8,
+                align: "center",
+                fillColor:'rgba(0, 75, 121, 0.65)',
+                fill: true,
+                lineWidth:0}
+                },
+                grid:{borderColor:'#ccc',borderWidth:1},
+                xaxis: { mode:"categories", tickLength: 0 },
+    });
+
+},"text");
 
 });
 
@@ -140,12 +162,14 @@ $(window).resize(function () {
     };
 			data[0] = {
 				label: "Used",
-				data: Math.floor(Math.random() * 100) + 1
+				data: Math.floor(Math.random() * 100) + 1,
+        color: '#7A9AAD'
 			}
 
       data[1] = {
 				label: "Free",
-				data: Math.floor(Math.random() * 100) + 1
+				data: Math.floor(Math.random() * 100) + 1,
+        color: '#00914D'
 			}
 
 
@@ -172,12 +196,14 @@ $(window).resize(function () {
 
   			data[0] = {
   				label: "Used",
-  				data: used_disk
+  				data: used_disk,
+          color: '#7A9AAD'
   			}
 
         data[1] = {
   				label: "Free",
-  				data: free_disk
+  				data: free_disk,
+          color: '#00914D'
   			}
 
 
@@ -250,17 +276,20 @@ $(window).resize(function () {
 
             data[0] = {
               label: "Used",
-              data: parseInt(mem_data[0])
+              data: parseInt(mem_data[0]),
+              color: '#7A9AAD'
             }
 
             data[1] = {
               label: "Free",
-              data: parseInt(mem_data[1])
+              data: parseInt(mem_data[1]),
+              color: '#00914D'
             }
 
             data[2] = {
               label: "Buff/Cache",
-              data: parseInt(mem_data[2])
+              data: parseInt(mem_data[2]),
+              color: '#979700'
             }
 
       $.plot(placeholder3, data, {
