@@ -31,6 +31,9 @@ $(function() {
                 grid:{borderColor:'#ccc',borderWidth:1},
                 xaxis: { mode:"categories", tickLength: 0 },
                 yaxis: {
+                  tickFormatter: function (val, axis) {
+                 return val + "%";
+                 },
                    min: 0,
                    max: 100,
                },
@@ -67,6 +70,9 @@ $.get('scripts/gpumeminfo.txt',function(gpumem_info){
               grid:{borderColor:'#ccc',borderWidth:1},
               xaxis: { mode:"categories", tickLength: 0 },
               yaxis: {
+                 tickFormatter: function (val, axis) {
+               return val + "%";
+                },
                  min: 0,
                  max: 100,
              },
@@ -75,11 +81,11 @@ $.get('scripts/gpumeminfo.txt',function(gpumem_info){
 },"text");
 
 $.get('scripts/cpuinfo.txt',function(cpu_info){
-
+$.get('scripts/cpucoreinfo.txt',function(cpucore_info){
 
   var d = cpu_info.split(",");
   var cpu_data = [[d[0]+" (1min)", d[0]],[d[1]+" (5min)", d[1]],[d[2]+" (15min)", d[2]]];
-
+  var core_number = cpucore_info.split(" ").length-1;
     $.plot("#placeholder_CPU", [ cpu_data ], {
       series: {
           bars: {
@@ -92,15 +98,24 @@ $.get('scripts/cpuinfo.txt',function(cpu_info){
                 },
                 grid:{borderColor:'#ccc',borderWidth:1},
                 xaxis: { mode:"categories", tickLength: 0 },
+                yaxis: {
+                   min: 0,
+                   max: core_number,
+                   tickSize: 2,
+                   tickDecimals: 0,
+               },
     });
 
 },"text");
+},"text");
 
 $.get('scripts/cpuinfo.txt',function(cpu_info){
+$.get('scripts/cpucoreinfo.txt',function(cpucore_info){
 
 
   var d = cpu_info.split(",");
   var cpu_data = [[d[0]+" (1min)", d[0]],[d[1]+" (5min)", d[1]],[d[2]+" (15min)", d[2]]];
+    var core_number = cpucore_info.split(" ").length-1;
 
     $.plot("#placeholder_CPU2", [ cpu_data ], {
       series: {
@@ -114,8 +129,15 @@ $.get('scripts/cpuinfo.txt',function(cpu_info){
                 },
                 grid:{borderColor:'#ccc',borderWidth:1},
                 xaxis: { mode:"categories", tickLength: 0 },
+                yaxis: {
+                   min: 0,
+                   max: core_number,
+                   tickSize: 2,
+                   tickDecimals: 0,
+               },
     });
 
+},"text");
 },"text");
 
 });
