@@ -185,20 +185,32 @@ $(window).resize(function () {
 			data[0] = {
 				label: "Used",
 				data: Math.floor(Math.random() * 100) + 1,
-        color: '#7A9AAD'
+        color: '#004b79'
 			}
 
       data[1] = {
 				label: "Free",
 				data: Math.floor(Math.random() * 100) + 1,
-        color: '#00914D'
+        color: 'rgba(0, 75, 121,0.2)'
 			}
 
 
 		var placeholder = $("#diskspaceplaceholder");
+    var newdiv = document.createElement("div");
+    // $(newdiv).attr("id","diskspaceplaceholder0");
+    // $(newdiv).addClass("diskspace-placeholder");
+    // var cl = document.getElementsByClassName("diskspace-container");
+    // $(cl).prepend(newdiv);
+
+  //  newdiv.id='diskspaceplaceholder0';
+    $(".diskspace-container").after($(newdiv));
+    var placeholder0 = $("#diskspaceplaceholder0");
+    var placeholder0_1 =$("#diskspaceplaceholder0_1");
 		var placeholder2 = $("#diskspace2placeholder");
     var placeholder3 = $("#memoryplaceholder");
     var placeholder4 = $("#memory2placeholder");
+
+
 
   $.get('scripts/diskinfo.txt',function(disk_info){
 
@@ -219,13 +231,13 @@ $(window).resize(function () {
   			data[0] = {
   				label: "Used",
   				data: used_disk,
-          color: '#7A9AAD'
+          color: '#004b79'
   			}
 
         data[1] = {
   				label: "Free",
   				data: free_disk,
-          color: '#00914D'
+          color:'rgba(0, 75, 121,0.2)'
   			}
 
 
@@ -241,7 +253,7 @@ $(window).resize(function () {
               show: true,
               radius: 1,
               label: {
-                  show: true,
+                  show: false,
                   radius: 1,
                   formatter: function(label, series) {
                       return '<div style="font-size:12.5px; bottom:0; position:relative; padding: 2px; color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
@@ -257,7 +269,64 @@ $(window).resize(function () {
     }
 			});
 
+      $.plot(placeholder0, data, {
+        series: {
+          pie: {
+              innerRadius:0.5,
+              stroke:{
+                width:0,
+                color:'#ddd'
+              },
+              show: true,
+              radius: 1,
+              label: {
+                  show: false,
+                  radius: 1,
+                  formatter: function(label, series) {
+                      return '<div style="font-size:12.5px; bottom:0; position:relative; padding: 2px; color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+                  },
+                  background: {
+                      opacity: 0.8,
+                      color: '#444'
+                  }
+              }
+          }
+        },   legend: {
+        show: false
+    }
+      });
+      $.plot(placeholder0_1, data, {
+        series: {
+          pie: {
+              innerRadius:0.5,
+              stroke:{
+                width:0,
+                color:'#ddd'
+              },
+              show: true,
+              radius: 1,
+              label: {
+                  show: false,
+                  radius: 1,
+                  formatter: function(label, series) {
+                      return '<div style="font-size:12.5px; bottom:0; position:relative; padding: 2px; color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+                  },
+                  background: {
+                      opacity: 0.8,
+                      color: '#444'
+                  }
+              }
+          }
+        },   legend: {
+        show: false
+    }
+      });
+
+
+
       },"text");
+
+
 
 
 
@@ -299,19 +368,19 @@ $(window).resize(function () {
             data[0] = {
               label: "Used",
               data: parseInt(mem_data[0]),
-              color: '#7A9AAD'
+              color: '#004b79'
             }
 
             data[1] = {
               label: "Free",
               data: parseInt(mem_data[1]),
-              color: '#00914D'
+              color: 'rgba(0, 75, 121,0.2)'
             }
 
             data[2] = {
               label: "Buff/Cache",
               data: parseInt(mem_data[2]),
-              color: '#979700'
+              color: '#00b1a7'
             }
 
       $.plot(placeholder3, data, {
