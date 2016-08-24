@@ -1,4 +1,6 @@
 
+var file_path = 'sysmon/', folders = ["BEAST","ROGUE","ROGUE"];
+
 $(function() {
 
   var stack = 0,
@@ -6,57 +8,58 @@ $(function() {
     lines = false,
     steps = false;
 
-  $.get('scripts/gpuinfo.txt',function(gpu_info){
+  var gpu_data = [], c = 0;
+
+gpu_read(0);
+function gpu_read(n){
+
+if(n==folders.length) {
+
+  $.plot("#placeholder_GPU", [gpu_data ], {
+    series: {
+        bars: {
+              show: true,
+              align: "center",
+              barWidth: 0.8,
+              fillColor:'rgba(0, 75, 121, 0.65)',
+              lineWidth:0}
+              },
+              grid:{borderColor:'#ccc',borderWidth:1},
+              xaxis: { mode:"categories", tickLength: 0 },
+              yaxis: {
+                tickFormatter: function (val, axis) {
+               return val + "%";
+               },
+                 min: 0,
+                 max: 100,
+             },
+  });
+}
+else {
+  $.get(file_path+folders[n]+'/gpuinfo.txt',function(gpu_info){
 
     var d = gpu_info.split("%");
 
-    var gpu_data = [];
-    for (var i = 0; i < d.length; ++i) {
+    for (var i = 0; i < d.length-1; ++i) {
       gpu_data.push([d[i]+"%",   parseInt(d[i])]);
+
       //hacky way for preventing the bars to merge:
-      for(var j=0; j < i; ++j) {
-        gpu_data[i][0] += " ";
+      for(var j=0; j < c; ++j) {
+        gpu_data[c][0] += " ";
       }
+      ++c;
     }
-    // 45% CORE 1
-    $.plot("#placeholder_GPU", [gpu_data ], {
-      series: {
-          bars: {
-                show: true,
-                align: "center",
-                barWidth: 0.8,
-                fillColor:'rgba(0, 75, 121, 0.65)',
-                lineWidth:0}
-                },
-                grid:{borderColor:'#ccc',borderWidth:1},
-                xaxis: { mode:"categories", tickLength: 0 },
-                yaxis: {
-                  tickFormatter: function (val, axis) {
-                 return val + "%";
-                 },
-                   min: 0,
-                   max: 100,
-               },
-    });
-
+    gpu_read(n+1);
 },"text");
+}
+}
 
-$.get('scripts/gpumeminfo.txt',function(gpumem_info){
+var gpu2_data = [], c2 = 0;
 
-  //document.getElementById("demo").innerHTML = gpumem_info;
+gpu2_read(0);
+function gpu2_read(n){
 
-  var d = gpumem_info.split("MiB");
-
-  var gpu2_data = [];
-  for (var i = 0; i < d.length; ++i) {
-    gpu2_data.push([(parseInt(d[i*2]))+"M / "+(parseInt(d[i*2+1]))+"M",  parseInt(d[i*2])*100/parseInt(d[i*2+1])]);
-    //same hacky way:
-    for(var j=0; j < i; ++j) {
-      gpu2_data[i][0]+=" ";
-    }
-
-  }
-
+if(n==folders.length) {
   $.plot("#placeholder_GPU2", [gpu2_data], {
     series: {
         bars: {
@@ -68,7 +71,7 @@ $.get('scripts/gpumeminfo.txt',function(gpumem_info){
               lineWidth:0}
               },
               grid:{borderColor:'#ccc',borderWidth:1},
-              xaxis: { mode:"categories", tickLength: 0 },
+              xaxis: { mode:"categories", tickLength: 0, labelWidth:30 },
               yaxis: {
                  tickFormatter: function (val, axis) {
                return val + "%";
@@ -77,11 +80,32 @@ $.get('scripts/gpumeminfo.txt',function(gpumem_info){
                  max: 100,
              },
   });
+}
+
+else {
+
+  $.get(file_path+folders[n]+'/gpumeminfo.txt',function(gpumem_info){
+
+  var d = gpumem_info.split("MiB");
+
+  for (var i = 0; i < d.length; ++i) {
+    gpu2_data.push([" "+((parseInt(d[i*2]))/1024).toFixed(1)+"G / "+((parseInt(d[i*2+1]))/1024).toFixed(1)+"G ",  parseInt(d[i*2])*100/parseInt(d[i*2+1])]);
+
+    //same hacky way:
+    for(var j=0; j < c2; ++j) {
+      gpu2_data[c2][0] += " ";
+    }
+    ++c2;
+  }
+
+  gpu2_read(n+1);
 
 },"text");
+}
+}
 
-$.get('scripts/cpuinfo.txt',function(cpu_info){
-$.get('scripts/cpucoreinfo.txt',function(cpucore_info){
+$.get(file_path+folders[0]+'/cpuinfo.txt',function(cpu_info){
+$.get(file_path+folders[0]+'/cpucoreinfo.txt',function(cpucore_info){
 
   var d = cpu_info.split(",");
   var cpu_data = [[d[0]+" (1min)", d[0]],[d[1]+" (5min)", d[1]],[d[2]+" (15min)", d[2]]];
@@ -109,8 +133,8 @@ $.get('scripts/cpucoreinfo.txt',function(cpucore_info){
 },"text");
 },"text");
 
-$.get('scripts/cpuinfo.txt',function(cpu_info){
-$.get('scripts/cpucoreinfo.txt',function(cpucore_info){
+$.get(file_path+folders[0]+'/cpuinfo.txt',function(cpu_info){
+$.get(file_path+folders[0]+'/cpucoreinfo.txt',function(cpucore_info){
 
 
   var d = cpu_info.split(",");
@@ -195,48 +219,44 @@ $(window).resize(function () {
 			}
 
 
-		var placeholder = $("#diskspaceplaceholder");
-    var newdiv = document.createElement("div");
-    // $(newdiv).attr("id","diskspaceplaceholder0");
-    // $(newdiv).addClass("diskspace-placeholder");
-    // var cl = document.getElementsByClassName("diskspace-container");
-    // $(cl).prepend(newdiv);
 
-  //  newdiv.id='diskspaceplaceholder0';
-    $(".diskspace-container").after($(newdiv));
-    var placeholder0 = $("#diskspaceplaceholder0");
-    var placeholder0_1 =$("#diskspaceplaceholder0_1");
 		var placeholder2 = $("#diskspace2placeholder");
     var placeholder3 = $("#memoryplaceholder");
     var placeholder4 = $("#memory2placeholder");
 
 
 
-  $.get('scripts/diskinfo.txt',function(disk_info){
+  $.get(file_path+folders[0]+'/diskinfo.txt',function(disk_info){
+
+    var disk_data = disk_info.split(" ");
+
+    for (var i = 0; i < disk_data.length-1; i+=3) {
+
+$( ".diskspace-container" ).append( "<div id=\"diskspaceplaceholder"+i+"\" class=\"diskspace-placeholder\"></div>" );
+
+    var placeholder = $("#diskspaceplaceholder"+i);
 
 
-      var disk_data = disk_info.split(" ");
+
+
+//<div id="diskspaceplaceholder" class="diskspace-placeholder"></div>
+  //  var placeholder0 = $(stuff);
+  //  var placeholder0_1 =$("#diskspaceplaceholder1");
+
+
 
       var data = [],
   			series = 2;
-      var used_disk = 0;
-      var free_disk = 0;
-  		for (var i = 0; i < disk_data.length-1; i+=2) {
-        used_disk += parseInt(disk_data[i]);
-        free_disk += parseInt(disk_data[i+1]);
-      }
-
-
 
   			data[0] = {
   				label: "Used",
-  				data: used_disk,
+  				data: disk_data[i],
           color: '#004b79'
   			}
 
         data[1] = {
   				label: "Free",
-  				data: free_disk,
+  				data: disk_data[i+1],
           color:'rgba(0, 75, 121,0.2)'
   			}
 
@@ -268,8 +288,8 @@ $(window).resize(function () {
         show: false
     }
 			});
-
-      $.plot(placeholder0, data, {
+}
+/*      $.plot(placeholder0, data, {
         series: {
           pie: {
               innerRadius:0.5,
@@ -322,7 +342,7 @@ $(window).resize(function () {
     }
       });
 
-
+*/
 
       },"text");
 
@@ -357,7 +377,7 @@ $(window).resize(function () {
       }
 			});
 
-      $.get('scripts/meminfo.txt',function(mem_info){
+      $.get(file_path+folders[0]+'/meminfo.txt',function(mem_info){
 
 
           var mem_data = mem_info.split(" ");
@@ -446,7 +466,7 @@ $(window).resize(function () {
 
 	});
 
-$.get('scripts/userinfo.txt',function(user_info){
+$.get(file_path+folders[0]+'/userinfo.txt',function(user_info){
 
   document.getElementById("beast_users").innerHTML = user_info ;
 
