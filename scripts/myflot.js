@@ -1,5 +1,6 @@
 
-var file_path = 'sysmon/', folders = ["BEAST","ROGUE","ROGUE"];
+var file_path = 'sysmon/', folders = ["BEAST","ROGUE"];//,"ANOTHER"];
+var folders_length = folders.length;
 
 $(function() {
 
@@ -13,7 +14,7 @@ $(function() {
 gpu_read(0);
 function gpu_read(n){
 
-if(n==folders.length) {
+if(n==folders_length) {
 
   $.plot("#placeholder_GPU", [gpu_data ], {
     series: {
@@ -59,7 +60,7 @@ var gpu2_data = [], c2 = 0;
 gpu2_read(0);
 function gpu2_read(n){
 
-if(n==folders.length) {
+if(n==folders_length) {
   $.plot("#placeholder_GPU2", [gpu2_data], {
     series: {
         bars: {
@@ -89,7 +90,7 @@ else {
   var d = gpumem_info.split("MiB");
 
   for (var i = 0; i < d.length; ++i) {
-    gpu2_data.push([" "+((parseInt(d[i*2]))/1024).toFixed(1)+"G / "+((parseInt(d[i*2+1]))/1024).toFixed(1)+"G ",  parseInt(d[i*2])*100/parseInt(d[i*2+1])]);
+    gpu2_data.push([" "+((parseInt(d[i*2]))/1024).toFixed(1)*1+"G / "+((parseInt(d[i*2+1]))/1024).toFixed(1)*1+"G ",  parseInt(d[i*2])*100/parseInt(d[i*2+1])]);
 
     //same hacky way:
     for(var j=0; j < c2; ++j) {
@@ -104,13 +105,24 @@ else {
 }
 }
 
-$.get(file_path+folders[0]+'/cpuinfo.txt',function(cpu_info){
-$.get(file_path+folders[0]+'/cpucoreinfo.txt',function(cpucore_info){
+cpu_read(0);
+function cpu_read(n) {
+
+if(n < folders_length) {
+$.get(file_path+folders[n]+'/cpuinfo.txt',function(cpu_info){
+$.get(file_path+folders[n]+'/cpucoreinfo.txt',function(cpucore_info){
+
 
   var d = cpu_info.split(",");
   var cpu_data = [[d[0]+" (1min)", d[0]],[d[1]+" (5min)", d[1]],[d[2]+" (15min)", d[2]]];
   var core_number = cpucore_info.split(" ").length-1;
-    $.plot("#placeholder_CPU", [ cpu_data ], {
+
+  $(".left_content").append("<div id=\"cpu-container"+n+"\" class=\"cpu-container\"></div>");
+  $("#cpu-container"+n).css("width", 100/folders_length+"%");
+  $( "#cpu-container"+n).append( "<h1> CPU utilisation "+folders[n]+"</h1>  <div id=\"placeholder_CPU"+n+"\" class=\"cpu-placeholder\"></div> ");
+
+
+    $.plot("#placeholder_CPU"+n, [ cpu_data ], {
       series: {
           bars: {
                 show: true,
@@ -132,74 +144,22 @@ $.get(file_path+folders[0]+'/cpucoreinfo.txt',function(cpucore_info){
 
 },"text");
 },"text");
+cpu_read(n+1);
 
-$.get(file_path+folders[0]+'/cpuinfo.txt',function(cpu_info){
-$.get(file_path+folders[0]+'/cpucoreinfo.txt',function(cpucore_info){
+}
 
-
-  var d = cpu_info.split(",");
-  var cpu_data = [[d[0]+" (1min)", d[0]],[d[1]+" (5min)", d[1]],[d[2]+" (15min)", d[2]]];
-    var core_number = cpucore_info.split(" ").length-1;
-
-    $.plot("#placeholder_CPU2", [ cpu_data ], {
-      series: {
-          bars: {
-                show: true,
-                barWidth: 0.8,
-                align: "center",
-                fillColor:'rgba(0, 75, 121, 0.65)',
-                fill: true,
-                lineWidth:0}
-                },
-                grid:{borderColor:'#ccc',borderWidth:1},
-                xaxis: { mode:"categories", tickLength: 0 },
-                yaxis: {
-                   min: 0,
-                   max: core_number,
-                   tickSize: 2,
-                   tickDecimals: 0,
-               },
-    });
-
-},"text");
-},"text");
+}
 
 });
 
 
 
-$(window).resize(function () {
+
+/*$(window).resize(function () {
     location.reload();
-});
+});*/
 
 	$(function() {
-
-		// Example Data
-
-		//var data = [
-		//	{ label: "Series1",  data: 10},
-		//	{ label: "Series2",  data: 30},
-		//	{ label: "Series3",  data: 90},
-		//	{ label: "Series4",  data: 70},
-		//	{ label: "Series5",  data: 80},
-		//	{ label: "Series6",  data: 110}
-		//];
-
-		//var data = [
-		//	{ label: "Series1",  data: [[1,10]]},
-		//	{ label: "Series2",  data: [[1,30]]},
-		//	{ label: "Series3",  data: [[1,90]]},
-		//	{ label: "Series4",  data: [[1,70]]},
-		//	{ label: "Series5",  data: [[1,80]]},
-		//	{ label: "Series6",  data: [[1,0]]}
-		//];
-
-		//var data = [
-		//	{ label: "Series A",  data: 0.2063},
-		//	{ label: "Series B",  data: 38888}
-		//];
-
-		// Randomly Generated Data
 
 		var data = [],
 			series = 2;
@@ -221,7 +181,8 @@ $(window).resize(function () {
 
 
 		var placeholder2 = $("#diskspace2placeholder");
-    var placeholder3 = $("#memoryplaceholder");
+
+
     var placeholder4 = $("#memory2placeholder");
 
 
@@ -377,8 +338,9 @@ $( ".diskspace-container" ).append( "<div id=\"diskspaceplaceholder"+i+"\" class
       }
 			});
 
-      $.get(file_path+folders[0]+'/meminfo.txt',function(mem_info){
-
+mem_read(0);
+function mem_read(n) {
+      $.get(file_path+folders[n]+'/meminfo.txt',function(mem_info){
 
           var mem_data = mem_info.split(" ");
 
@@ -402,8 +364,12 @@ $( ".diskspace-container" ).append( "<div id=\"diskspaceplaceholder"+i+"\" class
               data: parseInt(mem_data[2]),
               color: '#00b1a7'
             }
+            $(".footer_content").append("<div id=\"memory-container"+n+"\" class=\"memory-container\"></div>");
+            $("#memory-container"+n).css("width", 36/folders_length+"%");
+            $("#memory-container"+n).append("<div class=\"header_pie\">  <h1>Memory utilisation "+folders[n]+"</h1></div>")
+            $("#memory-container"+n).append("<div id=\"memoryplaceholder"+n+"\" class=\"memory-placeholder\"></div>");
 
-      $.plot(placeholder3, data, {
+      $.plot("#memoryplaceholder"+n, data, {
         series: {
           pie: {
             stroke:{
@@ -414,7 +380,7 @@ $( ".diskspace-container" ).append( "<div id=\"diskspaceplaceholder"+i+"\" class
             radius: 1,
             label: {
                 show: true,
-                radius: 1,
+                radius: 3/4,
                 formatter: function(label, series) {
                     return '<div style="font-size:12.5px; text-align:center; padding:2px; color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
                 },
@@ -431,37 +397,11 @@ $( ".diskspace-container" ).append( "<div id=\"diskspaceplaceholder"+i+"\" class
 
   },"text");
 
-      function labelFormatter(label, series) {
-        return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
-      }
-      $.plot(placeholder4, data, {
-        series: {
-          pie: {
-            stroke:{
-              width:0,
-              color:'#ddd'
-            },
-            show: true,
-            radius: 1,
-            label: {
-                show: true,
-                radius: 1,
-                formatter: function(label, series) {
-                    return '<div style="font-size:12.5px; text-align:center; padding:2px; color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-                },
-                background: {
-                    opacity: 0.8,
-                    color: '#444'
-                }
-            }
-        }
-      },   legend: {
-      show: false
-    }
-      });
-      function labelFormatter(label, series) {
-        return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
-      }
+  if(n<folders_length-1) {
+    mem_read(n+1);
+  }
+
+}
 
 
 	});
@@ -469,5 +409,11 @@ $( ".diskspace-container" ).append( "<div id=\"diskspaceplaceholder"+i+"\" class
 $.get(file_path+folders[0]+'/userinfo.txt',function(user_info){
 
   document.getElementById("beast_users").innerHTML = user_info ;
+
+},"text");
+
+$.get(file_path+folders[1]+'/userinfo.txt',function(user_info){
+
+  document.getElementById("rogue_users").innerHTML = user_info ;
 
 },"text");
