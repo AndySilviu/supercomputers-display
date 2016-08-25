@@ -1,5 +1,5 @@
 
-var file_path = 'sysmon/', folders = ["BEAST","ROGUE"];//,"ANOTHER"];
+var file_path = 'sysmon/', folders = ["BEAST","ROGUE"];
 var folders_length = folders.length;
 
 $(function() {
@@ -161,50 +161,19 @@ cpu_read(n+1);
 
 	$(function() {
 
-		var data = [],
-			series = 2;
+disk_read(0);
+function disk_read(n) {
+  $.get(file_path+folders[n]+'/diskinfo.txt',function(disk_info){
 
-		for (var i = 0; i < series; i++) {
-    };
-			data[0] = {
-				label: "Used",
-				data: Math.floor(Math.random() * 100) + 1,
-        color: '#004b79'
-			}
-
-      data[1] = {
-				label: "Free",
-				data: Math.floor(Math.random() * 100) + 1,
-        color: 'rgba(0, 75, 121,0.2)'
-			}
-
-
-
-		var placeholder2 = $("#diskspace2placeholder");
-
-
-    var placeholder4 = $("#memory2placeholder");
-
-
-
-  $.get(file_path+folders[0]+'/diskinfo.txt',function(disk_info){
+    $(".footer_content").append("<div id=\"diskspace-container"+n+"\" class=\"diskspace-container\"></div>");
+    $("#diskspace-container"+n).css("width", 38.5/folders_length+"%");
+    $("#diskspace-container"+n).append("<div class=\"header_pie\">  <h1>Disk space "+folders[n]+"</h1></div>");
 
     var disk_data = disk_info.split(" ");
 
     for (var i = 0; i < disk_data.length-1; i+=3) {
 
-$( ".diskspace-container" ).append( "<div id=\"diskspaceplaceholder"+i+"\" class=\"diskspace-placeholder\"></div>" );
-
-    var placeholder = $("#diskspaceplaceholder"+i);
-
-
-
-
-//<div id="diskspaceplaceholder" class="diskspace-placeholder"></div>
-  //  var placeholder0 = $(stuff);
-  //  var placeholder0_1 =$("#diskspaceplaceholder1");
-
-
+$("#diskspace-container"+n).append( "<div id=\"diskspaceplaceholder"+n+"0"+i+"\" class=\"diskspace-placeholder\"></div>" );
 
       var data = [],
   			series = 2;
@@ -221,9 +190,7 @@ $( ".diskspace-container" ).append( "<div id=\"diskspaceplaceholder"+i+"\" class
           color:'rgba(0, 75, 121,0.2)'
   			}
 
-
-		//	placeholder.unbind();
-			$.plot(placeholder, data, {
+			$.plot("#diskspaceplaceholder"+n+"0"+i, data, {
 				series: {
           pie: {
               innerRadius:0.5,
@@ -249,94 +216,14 @@ $( ".diskspace-container" ).append( "<div id=\"diskspaceplaceholder"+i+"\" class
         show: false
     }
 			});
+      $("#diskspaceplaceholder"+n+"0"+i).append("<br></br><br></br><p>"+disk_data[i+2]+"</p>");
 }
-/*      $.plot(placeholder0, data, {
-        series: {
-          pie: {
-              innerRadius:0.5,
-              stroke:{
-                width:0,
-                color:'#ddd'
-              },
-              show: true,
-              radius: 1,
-              label: {
-                  show: false,
-                  radius: 1,
-                  formatter: function(label, series) {
-                      return '<div style="font-size:12.5px; bottom:0; position:relative; padding: 2px; color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-                  },
-                  background: {
-                      opacity: 0.8,
-                      color: '#444'
-                  }
-              }
-          }
-        },   legend: {
-        show: false
-    }
-      });
-      $.plot(placeholder0_1, data, {
-        series: {
-          pie: {
-              innerRadius:0.5,
-              stroke:{
-                width:0,
-                color:'#ddd'
-              },
-              show: true,
-              radius: 1,
-              label: {
-                  show: false,
-                  radius: 1,
-                  formatter: function(label, series) {
-                      return '<div style="font-size:12.5px; bottom:0; position:relative; padding: 2px; color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-                  },
-                  background: {
-                      opacity: 0.8,
-                      color: '#444'
-                  }
-              }
-          }
-        },   legend: {
-        show: false
-    }
-      });
-
-*/
-
       },"text");
 
-
-
-
-
-			$.plot(placeholder2, data, {
-				series: {
-          pie: {
-              innerRadius:0.5,
-              stroke:{
-                width:0,
-                color:'#ddd'
-              },
-              show: true,
-              radius: 1,
-              label: {
-                  show: true,
-                  radius: 1,
-                  formatter: function(label, series) {
-                      return '<div style="font-size:12.5px; text-align:center; padding:2px; color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-                  },
-                  background: {
-                      opacity: 0.8,
-                      color: '#444'
-                  }
-              }
-          }
-        },   legend: {
-        show: false
-      }
-			});
+    if(n<folders_length-1) {
+      disk_read(n+1);
+    }
+}
 
 mem_read(0);
 function mem_read(n) {
