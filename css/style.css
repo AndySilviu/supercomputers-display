@@ -2,6 +2,11 @@ h1{
   font-size: 1.1vw;
   font-family: arial;
   color: #595959;
+  text-transform: uppercase;
+}
+
+.footer_content h1{
+  font-size: 1vw;
 }
 
 *{
@@ -46,7 +51,7 @@ body,html{
   position: relative;
   float: right;
   display: inline-block;
-  width: 99.5%;
+  width: 99.2%;
 
   height: 30%;
 
@@ -66,7 +71,14 @@ body,html{
 
 .gpu-placeholder {
   width: 100%;
-  height: 100%;
+  height: 98%;
+	font-size: 14px;
+	line-height: 1.2em;
+}
+
+.gpu2-placeholder {
+  width: 100%;
+  height: 98%;
 	font-size: 14px;
 	line-height: 1.2em;
 }
@@ -76,7 +88,7 @@ body,html{
   float: left;
 	width: 50%;
 	height: 48%;
-	padding: 20px 15px 15px 15px;
+	padding: 25px 15px 15px 15px;
 	background: #f2f2f2;
 }
 
@@ -92,25 +104,44 @@ body,html{
   position: relative;
 
   display: inline-block;
-	width: 38.5%;
+	width: 38%;
 	height: 92%;
-  bottom: -3.4%;
+  bottom: -5%;
 	padding: 60px 15px 15px 15px;
   float: left;
   box-shadow: 1px 1px 1px #999;
-  margin: 0.3%;
+  border-left: 1px solid rgba(0,0,0,0.2);
 	background: #ddd;
 }
 
-.diskspace-placeholder {
-	width: 20%;
-	height: 52%;
-  margin:1px;
+.diskspace-holder {
+  position: relative;
+  float:left;
+	width: 33%;
+	height: 55%;
   display: inline-block;
-	font-size: 14px;
+	font-size: 11px;
   text-align: center;
 	line-height: 1.2em;
-  /*background-color: gray;*/
+}
+
+.diskspace-placeholder {
+	width: 100%;
+	height: 60%;
+  display: inline-block;
+	font-size: 11px;
+  text-align: center;
+	line-height: 1.2em;
+}
+
+.separator-container {
+  box-sizing: border-box;
+  position: relative;
+  display: inline-block;
+	width: 0.9%;
+	height: 92%;
+  bottom: -5%;
+  float: left;
 }
 
 .memory-container {
@@ -120,7 +151,7 @@ body,html{
   display: inline-block;
 	width: 36%;
 	height: 92%;
-  bottom: -5.2%;
+  bottom: -5%;
 	padding: 60px 15px 15px 15px;
   float: left;
   box-shadow: 1px 1px 1px #999;
@@ -145,7 +176,24 @@ body,html{
   width: 21.1%;
   height: 100%;
   background-color: #ddd;
+}
 
+#hold_logo{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  width: 100%;
+  height: 55%;
+}
+
+#nott_logo{
+  width:75%;
+  height: 100%;
+  position: relative;
+  background-image: url("University_of_Nottingham_logo.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 #footer {
@@ -196,16 +244,6 @@ body,html{
   box-shadow: 0px 1px 1px #999;
 }
 
-#nott_logo{
-  width:100%;
-  height: 40%;
-  position: absolute;
-  bottom:6%;
-  right: -15%;
-  background-image: url("University_of_Nottingham_logo.svg");
-  background-size: contain;
-  background-repeat: no-repeat;
-}
 .circlehold{
   position: relative;
   top: -0.5em;

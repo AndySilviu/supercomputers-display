@@ -1,6 +1,10 @@
 
-var file_path = 'sysmon/', folders = ["BEAST","ROGUE"];
+var file_path = 'sysmon/', folders = ["beast","rogue"];//,"another"];
 var folders_length = folders.length;
+
+setTimeout(function(){
+   window.location.reload(1);
+}, 20000); // refresh rate in miliseconds
 
 $(function() {
 
@@ -10,6 +14,10 @@ $(function() {
     steps = false;
 
   var gpu_data = [], c = 0;
+
+//align gpu charts
+  var chart_size = $(".gpu2-placeholder").css("height").split("px");
+  $(".gpu2-placeholder").css("height",parseInt(chart_size[0])+18+"px");
 
 gpu_read(0);
 function gpu_read(n){
@@ -118,7 +126,7 @@ $.get(file_path+folders[n]+'/cpucoreinfo.txt',function(cpucore_info){
   var core_number = cpucore_info.split(" ").length-1;
 
   $(".left_content").append("<div id=\"cpu-container"+n+"\" class=\"cpu-container\"></div>");
-  $("#cpu-container"+n).css("width", 100/folders_length+"%");
+  $("#cpu-container"+n).css("width", 99/folders_length+"%");
   $( "#cpu-container"+n).append( "<h1> CPU utilisation "+folders[n]+"</h1>  <div id=\"placeholder_CPU"+n+"\" class=\"cpu-placeholder\"></div> ");
 
 
@@ -166,14 +174,24 @@ function disk_read(n) {
   $.get(file_path+folders[n]+'/diskinfo.txt',function(disk_info){
 
     $(".footer_content").append("<div id=\"diskspace-container"+n+"\" class=\"diskspace-container\"></div>");
-    $("#diskspace-container"+n).css("width", 38.5/folders_length+"%");
+    $("#diskspace-container"+n).css("width", 38/folders_length+"%");
     $("#diskspace-container"+n).append("<div class=\"header_pie\">  <h1>Disk space "+folders[n]+"</h1></div>");
+
+    if(n==folders_length-1) {
+      $(".footer_content").append("<div class=\"separator-container\"></div>");
+    }
 
     var disk_data = disk_info.split(" ");
 
     for (var i = 0; i < disk_data.length-1; i+=3) {
 
-$("#diskspace-container"+n).append( "<div id=\"diskspaceplaceholder"+n+"0"+i+"\" class=\"diskspace-placeholder\"></div>" );
+$("#diskspace-container"+n).append( "<div id=\"diskspaceholder"+n+"0"+i+"\" class=\"diskspace-holder\"></div>" );
+var fit_space = Math.ceil((disk_data.length-1)/6);
+if(fit_space < 3){
+  fit_space = 3;
+}
+$("#diskspaceholder"+n+"0"+i).css("width",+100/fit_space+"%");
+$("#diskspaceholder"+n+"0"+i).append( "<div id=\"diskspaceplaceholder"+n+"0"+i+"\" class=\"diskspace-placeholder\"></div>" );
 
       var data = [],
   			series = 2;
@@ -216,7 +234,7 @@ $("#diskspace-container"+n).append( "<div id=\"diskspaceplaceholder"+n+"0"+i+"\"
         show: false
     }
 			});
-      $("#diskspaceplaceholder"+n+"0"+i).append("<br></br><br></br><p>"+disk_data[i+2]+"</p>");
+      $("#diskspaceholder"+n+"0"+i).append("<p>"+disk_data[i+2]+"</p>");
 }
       },"text");
 
